@@ -48,14 +48,20 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', fadeInOnScroll);
     fadeInOnScroll();
 
-    // Scroll suave para navegación (sin opacidad extra)
+    // Scroll suave para navegación con offset (navbar fijo)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href').slice(1);
             const target = document.getElementById(targetId);
             if (target) {
                 e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth' });
+                const navbar = document.getElementById('navbar');
+                const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 10;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
             }
         });
     });
